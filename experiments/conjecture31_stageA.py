@@ -57,7 +57,7 @@ def hole_clique_check(X):
     # scipy from the polytope vertices we already have exactly — here we
     # simply enumerate candidate holes numerically as local minimizers is
     # overkill; instead read them from analysis/deep_holes_results.json.
-    with open(__file__.rsplit("/", 1)[0] + "/deep_holes_results.json") as f:
+    with open(__file__.rsplit("/", 1)[0] + "/../analysis/deep_holes_results.json") as f:
         data = json.load(f)
     return data
 
