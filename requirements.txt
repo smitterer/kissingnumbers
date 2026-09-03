@@ -1,0 +1,17 @@
+# Everything imported by anything that run_all.py (make verify) executes.
+# Lower bounds are the versions from `pip freeze` on the machine where the
+# verification was last run (macOS, CPython 3.14.4, 2026-09-03).
+#
+# No floating-point result of any of these libraries decides a verdict:
+# numpy/scipy are used only to find candidates that are then re-verified
+# in exact rational arithmetic (see README, "Exactness").
+
+sympy>=1.14.0      # verify/exact_check.py (exact radicals); Lemma 8 identity in analysis/verify_lemma4_lemma8.py
+pytest>=9.1.1      # verify/test_verify.py
+numpy>=2.5.2       # float prefilter in analysis/deep_holes.py and verify_lemma4_lemma8.py; int64 minors in independent_deep_holes_check.py
+scipy>=1.18.0      # float LP direction finder in analysis/stress_lp.py (the certificate itself is exact)
+networkx>=3.6.1    # find_cliques in analysis/verify_lemma4_lemma8.py (one of the two clique algorithms)
+
+# mpmath is installed automatically as a sympy dependency.
+# cvxpy is NOT needed here; it is only used by experiments/sdp/ -- see
+# requirements-experiments.txt.

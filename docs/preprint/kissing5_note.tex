@@ -1,0 +1,434 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+
+\title{Rigidity of the known five-dimensional kissing configurations\\
+and a proof of a conjecture of Cohn and Rajagopal}
+\author{Stephan Mitterer, MBA\thanks{%
+Computer assistance. All code, certificates and the first draft of this
+note were produced with Claude Fable 5 (Anthropic) under the author's
+direction (with Claude Opus 5 and Claude Sonnet 5 as subagents for the
+verifier implementations and literature retrieval, respectively). The
+results were then independently re-verified from the committed code in
+fresh sessions with Claude Fable 5.1, Gemini Pro and MiniMax M3, and by
+the exact-arithmetic checks described in Section~\ref{sec:methods}. The
+author is responsible for the mathematics, the repository and this text.}\\
+\texttt{s.mitterer@online360.at}}
+\date{September 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We prove that the four known $40$-point kissing configurations in
+$\R^5$ --- the $D_5$ configuration, Leech's $L_5$, Sz\"oll\H{o}si's
+$Q_5$, and Cohn--Rajagopal's $R_5$ --- are infinitesimally jammed, hence
+jammed; for $Q_5$ this answers a question of Sz\"oll\H{o}si, and for
+$D_5$, $L_5$ it reproduces results of Cohn, Jiao, Kumar, and Torquato.
+We certify in exact arithmetic that no $41$st point can be adjoined to
+any of the four. We then prove
+Conjecture~3.1 of Cohn and Rajagopal: no six-dimensional kissing
+configuration with $Q_5$ or $R_5$ as a cross section contains $72$ or
+more points; in fact at most $70$. The proof combines a reduction lemma
+(any such cross section is central and the configuration splits into two
+independent layers), a norm-coupling inequality showing each layer
+projects to a spherical code in $S^4$ with inner products at most
+$1/5$, the sharp linear-programming bound $A(5,1/5)=16$ with its
+equality analysis \`a la Delsarte--Goethals--Seidel~\cite{DGS1977}, and the exact
+computation that the deep-hole graphs of $Q_5$ and $R_5$ have clique
+number $12$ (versus $16$ for $D_5,L_5$). We also construct explicit
+$64$-point six-dimensional kissing configurations with $Q_5$ and $R_5$
+cross sections. All certificates are exact data (rational, or in
+$\Q(\sqrt3)$ for the $64$-point extensions), verified by independently
+written implementations, and accompany the paper.
+\end{abstract}
+
+\section{Introduction}
+
+The kissing number $\kappa(5)$ satisfies $40\le\kappa(5)\le 44$
+\cite{KZ1873,MV2010}, and $40$ is widely conjectured optimal. For
+decades, two non-isometric $40$-point kissing configurations in $\R^5$
+were known --- the minimal vectors of the root lattice $D_5$, and a
+non-lattice configuration of Leech \cite{Leech1967} --- and both were
+conjectured to be optimal; it was believed that no others existed
+\cite{CS1995,CJKT2011}. Sz\"oll\H{o}si \cite{Sz2023} found a third
+configuration $Q_5$, refuting that belief, and Cohn and Rajagopal
+\cite{CR2024} subsequently found a fourth, $R_5$. Sz\"oll\H{o}si explicitly
+raised the rigidity of $Q_5$ as a question; the question matters because
+a flexible optimal configuration would open a deform-and-augment route
+towards $\kappa(5)\ge 41$.
+
+We work at squared norm $2$: following the usage of \cite{CR2024}, a
+\emph{kissing configuration} is a finite $X\subset\R^d$ with
+$\ip{x}{x}=2$ and $\ip{x}{y}\le 1$ for $x\ne y$ (no size restriction
+is implied; the term refers to the touching condition, not to
+maximality); \emph{contacts} are pairs with $\ip{x}{y}=1$. All four configurations
+have purely rational coordinates in this normalization
+\cite[Table~2.2]{CR2024}; each has exactly $240$ contacts forming a
+$12$-regular graph.
+
+\begin{theorem}\label{thm:jam}
+Each of $D_5$, $L_5$, $Q_5$, $R_5$ is infinitesimally jammed, hence
+jammed. The results for $Q_5$ and $R_5$ are new; those for $D_5,L_5$
+reproduce \cite{CJKT2011}.
+\end{theorem}
+
+\begin{theorem}\label{thm:no41}
+For each $X\in\{D_5,L_5,Q_5,R_5\}$, the polytope
+$P_X=\{w\in\R^5:\ip{x}{w}\le 1\ \forall x\in X\}$ is compact with
+$\max_{w\in P_X}|w|^2=5/4$, attained exactly at $32$ vertices (the deep
+holes); consequently no $41$st point can be adjoined to $X$.
+\end{theorem}
+
+\begin{theorem}[Conjecture 3.1 of \cite{CR2024}]\label{thm:main}
+No six-dimensional kissing configuration containing a similarity copy
+of $Q_5$ or $R_5$ has more than $70$ points. In particular none reaches
+$72$.
+\end{theorem}
+
+We emphasize what is \emph{not} claimed: Theorems~\ref{thm:jam} and
+\ref{thm:no41} are statements about the known configurations and imply
+nothing about hypothetical unrelated $41$-point codes. Theorem~\ref{thm:main}
+says nothing about $\kappa(6)$ itself: the $E_6$ configuration gives $72$
+kissing spheres in dimension six, while the exact value of $\kappa(6)$
+remains unknown, the current bounds being $72\le\kappa(6)\le 77$
+\cite{dLLdMK2024}; our theorem only bounds configurations that contain
+$Q_5$ or $R_5$. The bound $70$ is likely not sharp (we construct
+$64$-point extensions and conjecture $64$ is optimal).
+
+\section{Jamming}\label{sec:jam}
+
+Let $X=\{x_1,\dots,x_{40}\}$ be one of the four configurations. An
+\emph{infinitesimal flex} is $(v_1,\dots,v_{40})$, $v_i\in\R^5$, with
+$\ip{x_i}{v_i}=0$ for all $i$ and
+$g_{ij}(v):=\ip{x_i}{v_j}+\ip{x_j}{v_i}\le 0$ for every contact
+$\{i,j\}$. Trivial flexes are $v_i=Ax_i$ with $A$ antisymmetric; they
+form a $10$-dimensional space since $X$ spans $\R^5$. $X$ is
+\emph{infinitesimally jammed} if every flex is trivial; infinitesimally
+jammed implies jammed \cite[Thm.~2.2]{CJKT2011} (Connelly;
+Roth--Whiteley).
+
+\begin{proof}[Proof of Theorem~\ref{thm:jam}]
+Two exact certificates per configuration.
+
+\emph{(i) A strictly positive self-stress:} weights $\omega_e>0$ on the
+$240$ contacts with $s_i:=\sum_{j:\{i,j\}\in E}\omega_{ij}x_j$ parallel
+to $x_i$ for every $i$. For $D_5$ and $L_5$ the uniform stress
+$\omega\equiv 1$ works, with $s_i=6x_i$. For $Q_5$ the uniform stress
+provably fails; a valid stress takes the two values $20/21$ (on $210$
+contacts) and $4/3$ (on $30$), with $s_i=\lambda_i x_i$,
+$\lambda_i\in\{40/7,44/7\}$. For $R_5$ the values are $200/207$
+($\times 210$), $280/207$ ($\times 18$), $220/207$ ($\times 12$), with
+$\lambda_i\in\{400/69,440/69,140/23\}$. Verification is a finite exact
+computation. For any flex $v$,
+\[
+\textstyle\sum_e \omega_e\, g_e(v) \;=\; \sum_i \ip{s_i}{v_i}
+\;=\; \sum_i \lambda_i \ip{x_i}{v_i} \;=\; 0 ,
+\]
+and since every $\omega_e>0$ and every $g_e(v)\le 0$, all $g_e(v)=0$:
+every flex preserves every contact to first order.
+
+\emph{(ii) The equality kernel is trivial:} the stacked linear system of
+the $40$ tangency equations and $240$ contact equalities in the $200$
+unknowns has rank exactly $190$ over $\Q$ (computed by fraction-free
+Bareiss elimination, and independently via a mod-$p$ argument:
+$\mathrm{rank}_{\mathbb F_p}\le\mathrm{rank}_\Q$ together with the
+$10$-dimensional space of rotation flexes in the kernel). Hence the
+kernel is exactly the trivial flexes, and $X$ is infinitesimally
+jammed.
+\end{proof}
+
+\section{Deep holes: no $41$st point}\label{sec:holes}
+
+\begin{proof}[Proof of Theorem~\ref{thm:no41}]
+$\sum_i x_i=0$ exactly and $X$ spans $\R^5$, so the origin is interior
+to $\mathrm{conv}(X)$ and $P_X$ is compact. Every vertex of $P_X$ is the
+unique solution of $\ip{x_i}{w}=1$ for five linearly independent
+constraints; enumerating all $\binom{40}{5}=658{,}008$ subsets in exact
+integer arithmetic yields the complete vertex lists: $42/50/92/100$
+vertices for $D_5/L_5/Q_5/R_5$, with maximal squared norm $5/4$
+attained at exactly $32$ vertices in each case (for $D_5$ these are the
+deep holes of \cite[\S3]{CR2024}; for $Q_5,R_5$ we confirm exactly the
+reflection structure described there). Since $|\cdot|^2$ is strictly
+convex, its maximum over $P_X$ is attained only at vertices; a $41$st
+point $x$ would satisfy $x\in P_X$ and $|x|^2=2>5/4$.
+\end{proof}
+
+For later use, define the \emph{hole graph} of $X$: vertices the $32$
+deep holes, edges the pairs with $\ip{w}{w'}\le 1/4$ (the maximum inner
+product between distinct holes is $23/20$ for $Q_5,R_5$ and $3/4$ for
+$D_5,L_5$). In the normalisation of \cite[\S3]{CR2024} the holes lie at
+squared norm $2$ and the threshold is $2/5$; our holes and threshold are
+the same up to the factor $8/5$, and for unit vectors the threshold is the
+$1/5$ of Lemmas~\ref{lem:unitip}--\ref{lem:lp}.
+
+\begin{lemma}\label{lem:holeclique}
+The clique number of the hole graph is $16$ for $D_5$ and $L_5$, and
+$12$ for $Q_5$ and $R_5$.
+\end{lemma}
+
+\begin{proof}
+Exact computation (branch-and-bound over the $32$-vertex graphs;
+verified by two algorithms: a library Bron--Kerbosch enumeration and an
+own branch-and-bound). For $D_5$ the $16$-cliques
+are the half-families $S_{\mathrm{even}},S_{\mathrm{odd}}$ of
+\cite[\S3]{CR2024}.
+\end{proof}
+
+\section{Six-dimensional extensions}\label{sec:sixdim}
+
+\begin{lemma}[Reduction]\label{lem:red}
+Let $Y\subset\R^6$ be a kissing configuration (squared norm $2$)
+containing a similarity copy $Z$ of $X\in\{Q_5,R_5\}$. Then:
+\begin{enumerate}
+\item $Z$ is central, at ambient scale, and $Z=Y\cap H$ for the
+hyperplane $H$ it spans; we may take $H=\{y_6=0\}$ and $Z=X\times\{0\}$.
+\item Every other point of $Y$ has the form $y=(u,h)$ with $u\in P_X$,
+$h^2\ge 3/4$.
+\item Any two such points with $h>0>h'$ are automatically compatible.
+\item Consequently $|Y| = 40 + |Y^+| + |Y^-|$, where $Y^{\pm}$ are the
+layers $\{h\gtrless 0\}$, and each layer is a \emph{cap set}: points
+$y_i=(u_i,h_i)$, $u_i\in P_X$, $h_i=\sqrt{2-|u_i|^2}$, pairwise
+$\ip{u_i}{u_j}+h_ih_j\le 1$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(1) $X$ has affine rank $5$, so $Z$ spans a hyperplane
+$H=\{\ip{y}{n}=c\}$, $|n|=1$; all points of $Z$ lie on the ambient sphere
+$S$. Since $X$ affinely spans $\R^5$ its circumsphere is unique, and the
+similarity carries it to the unique circumsphere of $Z$ inside $H$, namely
+$H\cap S$ with centre $cn$ and squared radius $2-c^2$; hence
+$Z = cn + \lambda\cdot(\text{orthogonal image of }X)$ with
+$\lambda^2\cdot 2 = 2-c^2$. $X$ has $240$ contact pairs at inner
+product exactly $1$; their images satisfy
+$\ip{y}{y'} = \lambda^2\cdot 1 + c^2 = 1 + c^2/2$, which respects the
+kissing constraint only if $c=0$. A point $(u,0)\in Y\setminus Z$ would
+satisfy $u\in P_X$, hence $|u|^2\le 5/4<2$ by
+Theorem~\ref{thm:no41} --- impossible for a point of squared norm $2$.
+(2) Compatibility with every $(x,0)$ gives $u\in P_X$;
+$|u|^2\le 5/4$ gives $h^2=2-|u|^2\ge 3/4$.
+(3) $\ip{y}{y'}=\ip{u}{u'}+hh' \le |u||u'| - \sqrt{3/4}\sqrt{3/4}
+\le 5/4-3/4 = 1/2 \le 1$.
+(4) Immediate from (1)--(3); conversely any cap set and its mirror
+assemble with $X\times\{0\}$ into a valid configuration.
+\end{proof}
+
+\begin{theorem}\label{thm:64}
+There exist $64$-point six-dimensional kissing configurations with
+$Q_5$ (resp.\ $R_5$) as central cross section: the cross-section
+together with a $12$-point hole clique placed at heights
+$\pm\sqrt3/2$. (Exact certificates accompany the paper.)
+\end{theorem}
+
+We now bound cap sets. Write $M(X)$ for the maximum size of a cap set;
+by Lemma~\ref{lem:red}, Theorem~\ref{thm:main} is equivalent to
+$M(Q_5),M(R_5)\le 15$.
+
+\begin{lemma}[Norm coupling]\label{lem:unitip}
+Let $y=(u,h)$, $y'=(u',h')$ be distinct compatible cap points with
+$u,u'\ne 0$. Then $\ip{\hat u}{\hat u'}\le 1/5$ for the unit vectors
+$\hat u = u/|u|$, $\hat u'=u'/|u'|$, with equality only if
+$|u|^2=|u'|^2=5/4$.
+\end{lemma}
+
+\begin{proof}
+Compatibility gives $\ip{\hat u}{\hat u'}\le(1-hh')/(|u||u'|)$. With
+$a=h$, $b=h'$, $|u|=\sqrt{2-a^2}$, $|u'|=\sqrt{2-b^2}$, and
+$a,b\in[\sqrt3/2,\sqrt2)$, the claim reduces to
+$G(a,b):=\sqrt{(2-a^2)(2-b^2)}-5(1-ab)\ge 0$. If $ab\ge 1$ this is
+trivial. If $ab<1$, both sides of
+$\sqrt{(2-a^2)(2-b^2)}\ge 5(1-ab)$ are nonnegative, and squaring gives
+the equivalent
+\[
+2(a^2+b^2) + 24(ab)^2 - 50\,ab + 21 \;\le\; 0 .
+\]
+Set $x=ab\in[3/4,1)$ and write $b=x/a$; the constraints
+$a,b\ge\sqrt3/2$ confine $a$ to $[\sqrt3/2,\,2x/\sqrt3]$. The function
+$\varphi(a)=a^2+x^2/a^2$ is strictly convex for $a>0$
+($\varphi''(a)=2+6x^2/a^4>0$), so its maximum over this interval is
+attained at an endpoint, and by the symmetry $a\leftrightarrow x/a$ both
+endpoints give the same value $\varphi(\sqrt3/2)=3/4+4x^2/3$. Hence the
+left side is at most
+$(80/3)x^2-50x+45/2$, a quadratic with roots exactly $x=3/4$ and
+$x=9/8$, so it is $\le 0$ on $[3/4,9/8]\supset[3/4,1)$. Equality forces
+$x=3/4$ and $a=b=\sqrt3/2$, i.e.\ $|u|^2=|u'|^2=5/4$; tracing back,
+equality in the lemma also requires $\ip{u}{u'}=1-hh'$.
+In angular variables $|u|=\sqrt2\sin\theta$, $h=\sqrt2\cos\theta$ the
+claim reads
+$10\cos\theta\cos\theta'+2\sin\theta\sin\theta'
+=6\cos(\theta-\theta')+4\cos(\theta+\theta')\ge 5$ on $(0,\theta^*]^2$,
+$\sin^2\theta^*=5/8$: for fixed $\theta+\theta'$ the left side decreases
+in $|\theta-\theta'|$, so the minimum is on the edge $\theta'=\theta^*$,
+where $g(\theta)=6\cos(\theta-\theta^*)+4\cos(\theta+\theta^*)$ is
+concave with $g(\theta^*)=5<g(0)$.
+\end{proof}
+
+Two degenerate remarks: the pole point $(0,\sqrt2)$ is incompatible
+with every other cap point ($g=\sqrt2\,h'\ge\sqrt{3/2}>1$), so a cap
+set of size $\ge 2$ has all $u_i\ne 0$; and two cap points never share
+a direction ($\ip{\hat u}{\hat u'}=1>1/5$). Thus in a cap set of size
+$N\ge 2$ the $\hat u_i$ are $N$ distinct unit vectors in $S^4$ with
+pairwise inner products $\le 1/5$.
+
+\begin{lemma}[LP bound, exact certificate]\label{lem:lp}
+Any $N$ unit vectors in $\R^5$ with pairwise inner products $\le 1/5$
+satisfy $N\le 16$.
+\end{lemma}
+
+\begin{proof}
+Let $G_k$ denote the Gegenbauer polynomials for $S^4$ (parameter
+$\lambda=3/2$) normalized by $G_k(1)=1$, positive definite on $S^4$
+(Schoenberg~\cite{Schoenberg1942}): $G_1(t)=t$, $G_2(t)=(5t^2-1)/4$, $G_3(t)=(7t^3-3t)/4$.
+One has the exact identity
+\[
+F(t) \;:=\; 1 + (30/7)\,G_1(t) + (25/4)\,G_2(t)
++ (125/28)\,G_3(t) \;=\; (125/16)\,
+\bigl(t+3/5\bigr)^2\bigl(t-1/5\bigr),
+\]
+with $f_0=1$, $f_1=30/7$, $f_2=25/4$, $f_3=125/28$, all coefficients
+positive, $F\le 0$ on $[-1,1/5]$, and $F(1)=16$.
+For unit vectors $v_1,\dots,v_N$ with pairwise $t_{ij}\le 1/5$, using
+$\sum_{i,j}G_k(t_{ij})\ge 0$ (Schoenberg~\cite{Schoenberg1942}),
+\[
+N^2=\textstyle\sum_{i,j}G_0(t_{ij})
+\le \sum_k f_k\sum_{i,j}G_k(t_{ij})
+= N\,F(1) + \sum_{i\ne j}F(t_{ij}) \le 16N . \qedhere
+\]
+\end{proof}
+
+\begin{remark}[Sharpness]\label{rem:sharp}
+The bound is attained by the $5$-demihypercube: the $16$ vectors
+$(\pm1,\dots,\pm1)/\sqrt5$ with an even number of minus signs, whose
+pairwise inner products lie in $\{1/5,-3/5\}$. This is exactly half of
+the deep-hole family of $D_5$ --- whence $M(D_5)=16$ and the classical
+$E_6$ extension. The linear program alone therefore cannot give $15$:
+the hole structure of $Q_5,R_5$ in the next lemma is essential.
+\end{remark}
+
+\begin{lemma}[Equality-case rigidity]\label{lem:rigid}
+$M(Q_5)\le 15$ and $M(R_5)\le 15$.
+\end{lemma}
+
+\begin{proof}
+Suppose a cap set over $X\in\{Q_5,R_5\}$ had $16$ points. Then
+equality holds throughout the proof of Lemma~\ref{lem:lp} for the
+$\hat u_i$ (the equality analysis of
+Delsarte--Goethals--Seidel~\cite{DGS1977}). In particular $\sum_{i\ne j}F(t_{ij})=0$ with every term
+$\le 0$, so every $t_{ij}$ lies in the root set $\{-3/5,\,1/5\}$; and
+$\sum_{i,j}G_k(t_{ij})=0$ for $k=1,2,3$ (all $f_k>0$). For $k=1$
+this reads
+$0=\sum_{i,j}G_1(t_{ij})=\sum_{i,j}\ip{\hat u_i}{\hat u_j}
+=|\sum_i\hat u_i|^2$, so $\sum_i\hat u_i=0$, and pairing with
+$\hat u_i$:
+$1+\sum_{j\ne i}t_{ij}=0$. If $n_i$ pairs equal $1/5$ (and $15-n_i$
+equal $-3/5$), then $1+n_i/5-3(15-n_i)/5=0$, i.e.\ $n_i=10$ for
+\emph{every} $i$: each point has ten partners at inner product exactly
+$1/5$.
+
+By the strictness in Lemma~\ref{lem:unitip}, each such pair forces both
+endpoints to have $|u|^2=5/4$ exactly; since $n_i>0$ for all $i$, all
+sixteen $u_i$ have maximal norm, hence (Theorem~\ref{thm:no41},
+sphere-touching) all are deep-hole vertices, pairwise distinct. Their
+compatibility at $h_i=h_j=\sqrt3/2$ reads $\ip{u_i}{u_j}\le 1/4$: a
+$16$-clique in the hole graph, contradicting
+Lemma~\ref{lem:holeclique}.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+By Lemma~\ref{lem:red},
+$|Y| = 40 + |Y^+| + |Y^-| \le 40 + 15 + 15 = 70 < 72$.
+\end{proof}
+
+\begin{remark}[Calibration]
+Applied to $D_5$ or $L_5$, the same chain yields no contradiction ---
+their hole graphs do contain $16$-cliques --- and
+Lemmas~\ref{lem:red}--\ref{lem:lp} give $|Y|\le 72$, exactly attained
+by the $E_6$ and Leech six-dimensional configurations. The argument is
+tight where it must be.
+\end{remark}
+
+\begin{conjecture}
+$M(Q_5)=M(R_5)=12$; equivalently, the $64$-point configurations of
+Theorem~\ref{thm:64} are the largest six-dimensional kissing
+configurations with $Q_5$ or $R_5$ cross sections. (Supported by the
+exact hole-clique number $12$ and a multistart penalty minimisation
+($200$ restarts per case, \texttt{experiments/conjecture31\_stageA.py})
+that reaches $12$ points to machine precision and finds no $13$-point cap
+set; this probe is not part of the verified claims. Closing $12$ versus
+$15$ requires more than the LP bound, by Remark~\ref{rem:sharp}.)
+\end{conjecture}
+
+\section{Methodology, verification, and data}\label{sec:methods}
+
+All verdict-relevant computations are exact: configurations are stored
+with exact coordinates (rational; the $64$-point extensions carry
+$\sqrt3/2$ symbolically); an exact-arithmetic checker (canonical
+multiquadratic representation with a decidable sign test, no floating
+point on any accepting path) verifies all norm and inner-product
+claims; the vertex enumeration of Section~\ref{sec:holes} runs in
+integer arithmetic with proven overflow bounds; stresses carry rational
+certificates; ranks and clique numbers are recomputed exactly by two
+independent implementations. Three of the computational
+claims are checked by two independently written implementations: the
+jamming certificates of Theorem~\ref{thm:jam} (positivity and parallelism
+of the stress and the rank $190$; one implementation uses dense integer
+rows and a $\lambda$-multiple test, the other sparse rows assembled from
+the contact graph, a $2\times 2$-minor test, different primes and an
+exact Bareiss rank), the vertex enumeration of Theorem~\ref{thm:no41}
+(a float-prefiltered enumeration with exact re-verification, and a
+tolerance-free integer enumeration), and the clique numbers of
+Lemma~\ref{lem:holeclique} (a library Bron--Kerbosch enumeration and an
+own branch-and-bound). The Gegenbauer identity of Lemma~\ref{lem:lp} is
+checked by a single symbolic expansion; the $64$-point configurations of
+Theorem~\ref{thm:64} by the exact checker on the shipped coordinates and,
+separately, by rebuilding them from a $12$-clique of the hole graph.
+Lemmas~\ref{lem:red}, \ref{lem:unitip} and~\ref{lem:rigid} are proved in
+the text and use only the verified inputs above. The repository
+\url{https://github.com/smitterer/kissingnumbers} (cite as
+\texttt{github.com/smitterer/kissingnumbers}, release v1.0) contains all
+configurations, certificates, both implementations, and an experiment log; a
+single command re-runs every check against a table of expected values.
+
+\begin{thebibliography}{99}
+\bibitem{KZ1873} A.~Korkine, G.~Zolotareff, Sur les formes quadratiques,
+\emph{Math.\ Ann.} \textbf{6} (1873), 366--389.
+\bibitem{Leech1967} J.~Leech, Five dimensional non-lattice sphere
+packings, \emph{Canad.\ Math.\ Bull.} \textbf{10} (1967), 387--393.
+\bibitem{CS1995} J.H.~Conway, N.J.A.~Sloane, What are all the best
+sphere packings in low dimensions?, \emph{Discrete Comput.\ Geom.}
+\textbf{13} (1995), 383--403.
+\bibitem{CJKT2011} H.~Cohn, Y.~Jiao, A.~Kumar, S.~Torquato, Rigidity of
+spherical codes, \emph{Geom.\ Topol.} \textbf{15} (2011), 2235--2273.
+\bibitem{MV2010} H.D.~Mittelmann, F.~Vallentin, High-accuracy
+semidefinite programming bounds for kissing numbers,
+\emph{Exp.\ Math.} \textbf{19} (2010), 175--179.
+\bibitem{Sz2023} F.~Sz\"oll\H{o}si, A note on five dimensional kissing
+arrangements, \emph{Math.\ Res.\ Lett.} \textbf{30} (2023), no.~5,
+1609--1615; arXiv:2301.08272.
+\bibitem{CR2024} H.~Cohn, I.~Rajagopal, Variations on five-dimensional
+sphere packings, \emph{Discrete Comput.\ Geom.} (2026),
+doi:10.1007/s00454-026-00841-x; arXiv:2412.00937.
+\bibitem{dLLdMK2024} D.~de~Laat, N.~Leijenhorst, W.H.H.~de~Muinck
+Keizer, Optimality and uniqueness of the $D_4$ root system,
+arXiv:2404.18794.
+\bibitem{Schoenberg1942} I.J.~Schoenberg, Positive definite functions on
+spheres, \emph{Duke Math.\ J.} \textbf{9} (1942), 96--108.
+\bibitem{DGS1977} P.~Delsarte, J.M.~Goethals, J.J.~Seidel, Spherical codes
+and designs, \emph{Geom.\ Dedicata} \textbf{6} (1977), 363--388.
+\end{thebibliography}
+
+\end{document}

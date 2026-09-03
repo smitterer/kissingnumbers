@@ -1,0 +1,4 @@
+# Additional dependency for experiments/sdp/ only (floating-point SDP
+# prototypes that back no claim of the paper).  Not needed for `make verify`.
+-r requirements.txt
+cvxpy>=1.9.2       # experiments/sdp/bachoc_vallentin.py (three-point bound prototype)
