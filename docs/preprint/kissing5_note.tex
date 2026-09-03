@@ -15,8 +15,9 @@
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\ip}[2]{\langle #1,#2\rangle}
 
-\title{Rigidity of the known five-dimensional kissing configurations\\
-and a proof of a conjecture of Cohn and Rajagopal}
+\title{Six-dimensional extensions of the five-dimensional kissing\\
+configurations $Q_5$ and $R_5$: a proof of a conjecture of Cohn and Rajagopal\\[0.6ex]
+{\large with rigidity and maximality certificates for $D_5$, $L_5$, $Q_5$, $R_5$}}
 \author{Stephan Mitterer\thanks{%
 Computer assistance. All code, certificates and the first draft of this
 note were produced with Claude Fable 5 (Anthropic) under the author's
@@ -35,27 +36,29 @@ described in Section~\ref{sec:methods}.}\\
 \maketitle
 
 \begin{abstract}
-We prove that the four known $40$-point kissing configurations in
-$\R^5$ --- the $D_5$ configuration, Leech's $L_5$, Sz\"oll\H{o}si's
-$Q_5$, and Cohn--Rajagopal's $R_5$ --- are infinitesimally jammed, hence
-jammed; for $Q_5$ this answers a question of Sz\"oll\H{o}si, and for
-$D_5$, $L_5$ it reproduces results of Cohn, Jiao, Kumar, and Torquato.
-We certify in exact arithmetic that no $41$st point can be adjoined to
-any of the four. We then prove
-Conjecture~3.1 of Cohn and Rajagopal: no six-dimensional kissing
-configuration with $Q_5$ or $R_5$ as a cross section contains $72$ or
-more points; in fact at most $70$. The proof combines a reduction lemma
-(any such cross section is central and the configuration splits into two
-independent layers), a norm-coupling inequality showing each layer
-projects to a spherical code in $S^4$ with inner products at most
-$1/5$, the sharp linear-programming bound $A(5,1/5)=16$ with its
-equality analysis \`a la Delsarte--Goethals--Seidel~\cite{DGS1977}, and the exact
+We prove Conjecture~3.1 of Cohn and Rajagopal: no six-dimensional
+kissing configuration with Sz\"oll\H{o}si's $Q_5$ or Cohn--Rajagopal's
+$R_5$ as a cross section contains $72$ or more points; in fact at most
+$70$. The proof combines a reduction lemma (any such cross section is
+central and the configuration splits into two independent layers), a
+norm-coupling inequality showing each layer projects to a spherical code
+in $S^4$ with inner products at most $1/5$, the sharp
+linear-programming bound $A(5,1/5)=16$ with its equality analysis
+\`a la Delsarte--Goethals--Seidel~\cite{DGS1977}, and the exact
 computation that the deep-hole graphs of $Q_5$ and $R_5$ have clique
 number $12$ (versus $16$ for $D_5,L_5$). We also construct explicit
 $64$-point six-dimensional kissing configurations with $Q_5$ and $R_5$
-cross sections. All certificates are exact data (rational, or in
-$\Q(\sqrt3)$ for the $64$-point extensions), verified by independent
-computations, and accompany the paper.
+cross sections and conjecture that $64$ is optimal.
+As supporting results, obtained by exact computation, we show that the
+four known $40$-point kissing configurations in $\R^5$ --- the $D_5$
+configuration, Leech's $L_5$, $Q_5$, and $R_5$ --- are infinitesimally
+jammed, hence jammed (for $Q_5$ this answers a question of
+Sz\"oll\H{o}si; for $D_5$, $L_5$ it reproduces results of Cohn, Jiao,
+Kumar, and Torquato), and that no $41$st point can be adjoined to any of
+the four; the second fact is an input to the main argument.
+All certificates are exact data (rational, or in $\Q(\sqrt3)$ for the
+$64$-point extensions), verified by independent computations, and
+accompany the paper.
 \end{abstract}
 
 \section{Introduction}
@@ -68,10 +71,7 @@ non-lattice configuration of Leech \cite{Leech1967} --- and both were
 conjectured to be optimal; it was believed that no others existed
 \cite{CS1995,CJKT2011}. Sz\"oll\H{o}si \cite{Sz2023} found a third
 configuration $Q_5$, refuting that belief, and Cohn and Rajagopal
-\cite{CR2024} subsequently found a fourth, $R_5$. Sz\"oll\H{o}si explicitly
-raised the rigidity of $Q_5$ as a question; the question matters because
-a flexible optimal configuration would open a deform-and-augment route
-towards $\kappa(5)\ge 41$.
+\cite{CR2024} subsequently found a fourth, $R_5$.
 
 We work at squared norm $2$: following the usage of \cite{CR2024}, a
 \emph{kissing configuration} is a finite $X\subset\R^d$ with
@@ -82,11 +82,25 @@ have purely rational coordinates in this normalization
 \cite[Table~2.2]{CR2024}; each has exactly $240$ contacts forming a
 $12$-regular graph.
 
-\begin{theorem}\label{thm:jam}
-Each of $D_5$, $L_5$, $Q_5$, $R_5$ is infinitesimally jammed, hence
-jammed. The results for $Q_5$ and $R_5$ are new; those for $D_5,L_5$
-reproduce \cite{CJKT2011}.
+Cohn and Rajagopal \cite[\S3]{CR2024} extend $D_5$ and $L_5$ to six
+dimensions by placing $16$-element sets of pairwise compatible deep
+holes in two layers above and below the cross section; this yields
+$72$-point six-dimensional kissing configurations, among them those of
+$E_6$ and of Leech. For $Q_5$ and $R_5$ the same construction breaks
+down --- no $16$ deep holes are pairwise compatible
+(Lemma~\ref{lem:holeclique}) --- and they conjectured
+\cite[Conjecture~3.1]{CR2024} that no six-dimensional kissing
+configuration with $Q_5$ or $R_5$ as a cross section contains $72$ or
+more points. Our main result proves this with the stronger bound $70$.
+
+\begin{theorem}[Conjecture 3.1 of \cite{CR2024}]\label{thm:main}
+No six-dimensional kissing configuration containing a similarity copy
+of $Q_5$ or $R_5$ has more than $70$ points. In particular none reaches
+$72$.
 \end{theorem}
+
+Two facts about the known configurations accompany the main result.
+The first is an input to its proof:
 
 \begin{theorem}\label{thm:no41}
 For each $X\in\{D_5,L_5,Q_5,R_5\}$, the polytope
@@ -95,14 +109,20 @@ $\max_{w\in P_X}|w|^2=5/4$, attained exactly at $32$ vertices (the deep
 holes); consequently no $41$st point can be adjoined to $X$.
 \end{theorem}
 
-\begin{theorem}[Conjecture 3.1 of \cite{CR2024}]\label{thm:main}
-No six-dimensional kissing configuration containing a similarity copy
-of $Q_5$ or $R_5$ has more than $70$ points. In particular none reaches
-$72$.
+The second is not used in the proof but is of independent interest:
+
+\begin{theorem}\label{thm:jam}
+Each of $D_5$, $L_5$, $Q_5$, $R_5$ is infinitesimally jammed, hence
+jammed. The results for $Q_5$ and $R_5$ are new; those for $D_5,L_5$
+reproduce \cite{CJKT2011}.
 \end{theorem}
 
-We emphasize what is \emph{not} claimed: Theorems~\ref{thm:jam} and
-\ref{thm:no41} are statements about the known configurations and imply
+Sz\"oll\H{o}si explicitly raised the rigidity of $Q_5$ as a question;
+the question matters because a flexible optimal configuration would open
+a deform-and-augment route towards $\kappa(5)\ge 41$.
+
+We emphasize what is \emph{not} claimed: Theorems~\ref{thm:no41} and
+\ref{thm:jam} are statements about the known configurations and imply
 nothing about hypothetical unrelated $41$-point codes. Theorem~\ref{thm:main}
 says nothing about $\kappa(6)$ itself: the $E_6$ configuration gives $72$
 kissing spheres in dimension six, while the exact value of $\kappa(6)$
@@ -111,52 +131,11 @@ remains unknown, the current bounds being $72\le\kappa(6)\le 77$
 $Q_5$ or $R_5$. The bound $70$ is likely not sharp (we construct
 $64$-point extensions and conjecture $64$ is optimal).
 
-\section{Jamming}\label{sec:jam}
-
-Let $X=\{x_1,\dots,x_{40}\}$ be one of the four configurations. An
-\emph{infinitesimal flex} is $(v_1,\dots,v_{40})$, $v_i\in\R^5$, with
-$\ip{x_i}{v_i}=0$ for all $i$ and
-$g_{ij}(v):=\ip{x_i}{v_j}+\ip{x_j}{v_i}\le 0$ for every contact
-$\{i,j\}$. Trivial flexes are $v_i=Ax_i$ with $A$ antisymmetric; they
-form a $10$-dimensional space since $X$ spans $\R^5$. $X$ is
-\emph{infinitesimally jammed} if every flex is trivial; infinitesimally
-jammed implies jammed \cite[Thm.~2.2]{CJKT2011} (Connelly;
-Roth--Whiteley).
-
-\begin{proof}[Proof of Theorem~\ref{thm:jam}]
-Two exact certificates per configuration.
-
-\emph{(i) A strictly positive self-stress:} weights $\omega_e>0$ on the
-$240$ contacts with $s_i:=\sum_{j:\{i,j\}\in E}\omega_{ij}x_j$ parallel
-to $x_i$ for every $i$. For $D_5$ and $L_5$ the uniform stress
-$\omega\equiv 1$ works, with $s_i=6x_i$. For $Q_5$ the uniform stress
-provably fails; a valid stress takes the two values $20/21$ (on $210$
-contacts) and $4/3$ (on $30$), with $s_i=\lambda_i x_i$,
-$\lambda_i\in\{40/7,44/7\}$. For $R_5$ the values are $200/207$
-($\times 210$), $280/207$ ($\times 18$), $220/207$ ($\times 12$), with
-$\lambda_i\in\{400/69,440/69,140/23\}$. Verification is a finite exact
-computation. For any flex $v$,
-\[
-\textstyle\sum_e \omega_e\, g_e(v) \;=\; \sum_i \ip{s_i}{v_i}
-\;=\; \sum_i \lambda_i \ip{x_i}{v_i} \;=\; 0 ,
-\]
-and since every $\omega_e>0$ and every $g_e(v)\le 0$, all $g_e(v)=0$:
-every flex preserves every contact to first order.
-
-\emph{(ii) The equality kernel is trivial:} the stacked linear system of
-the $40$ tangency equations and $240$ contact equalities in the $200$
-unknowns has rank exactly $190$ over $\Q$ (computed by fraction-free
-Bareiss elimination, and independently via a mod-$p$ argument:
-$\mathrm{rank}_{\mathbb F_p}\le\mathrm{rank}_\Q$ together with the
-$10$-dimensional space of rotation flexes in the kernel). Hence the
-kernel is exactly the trivial flexes, and $X$ is infinitesimally
-jammed.
-\end{proof}
-
 \section{Deep holes: no $41$st point}\label{sec:holes}
 
 \begin{proof}[Proof of Theorem~\ref{thm:no41}]
-$\sum_i x_i=0$ exactly and $X$ spans $\R^5$, so the origin is interior
+Write $X=\{x_1,\dots,x_{40}\}$. Then $\sum_i x_i=0$ exactly and $X$ spans
+$\R^5$, so the origin is interior
 to $\mathrm{conv}(X)$ and $P_X$ is compact. Every vertex of $P_X$ is the
 unique solution of $\ip{x_i}{w}=1$ for five linearly independent
 constraints; enumerating all $\binom{40}{5}=658{,}008$ subsets in exact
@@ -292,6 +271,8 @@ satisfy $N\le 16$.
 \end{lemma}
 
 \begin{proof}
+This is a case of Levenshtein's bound \cite{Lev1979}; we include the
+explicit certificate since its equality analysis is used below.
 Let $G_k$ denote the Gegenbauer polynomials for $S^4$ (parameter
 $\lambda=3/2$) normalized by $G_k(1)=1$, positive definite on $S^4$
 (Schoenberg~\cite{Schoenberg1942}): $G_1(t)=t$, $G_2(t)=(5t^2-1)/4$, $G_3(t)=(7t^3-3t)/4$.
@@ -315,7 +296,9 @@ N^2=\textstyle\sum_{i,j}G_0(t_{ij})
 \begin{remark}[Sharpness]\label{rem:sharp}
 The bound is attained by the $5$-demihypercube: the $16$ vectors
 $(\pm1,\dots,\pm1)/\sqrt5$ with an even number of minus signs, whose
-pairwise inner products lie in $\{1/5,-3/5\}$. This is exactly half of
+pairwise inner products lie in $\{1/5,-3/5\}$. This code attains
+Levenshtein's bound \cite{Lev1979} and is the unique $(5,16,1/5)$
+spherical code up to isometry \cite[Appendix~A]{CK2007}. This is exactly half of
 the deep-hole family of $D_5$ --- whence $M(D_5)=16$ and the classical
 $E_6$ extension. The linear program alone therefore cannot give $15$:
 the hole structure of $Q_5,R_5$ in the next lemma is essential.
@@ -375,6 +358,51 @@ of the verified claims. Closing $12$ versus $15$ requires more than the LP
 bound, by Remark~\ref{rem:sharp}.)
 \end{conjecture}
 
+\section{Jamming}\label{sec:jam}
+
+We record the rigidity of the four configurations. This is not used
+above; it answers Sz\"oll\H{o}si's question and closes the
+deform-and-augment route mentioned in the introduction.
+Let $X=\{x_1,\dots,x_{40}\}$ be one of the four configurations. An
+\emph{infinitesimal flex} is $(v_1,\dots,v_{40})$, $v_i\in\R^5$, with
+$\ip{x_i}{v_i}=0$ for all $i$ and
+$g_{ij}(v):=\ip{x_i}{v_j}+\ip{x_j}{v_i}\le 0$ for every contact
+$\{i,j\}$. Trivial flexes are $v_i=Ax_i$ with $A$ antisymmetric; they
+form a $10$-dimensional space since $X$ spans $\R^5$. $X$ is
+\emph{infinitesimally jammed} if every flex is trivial; infinitesimally
+jammed implies jammed \cite[Thm.~2.2]{CJKT2011} (Connelly;
+Roth--Whiteley).
+
+\begin{proof}[Proof of Theorem~\ref{thm:jam}]
+Two exact certificates per configuration.
+
+\emph{(i) A strictly positive self-stress:} weights $\omega_e>0$ on the
+$240$ contacts with $s_i:=\sum_{j:\{i,j\}\in E}\omega_{ij}x_j$ parallel
+to $x_i$ for every $i$. For $D_5$ and $L_5$ the uniform stress
+$\omega\equiv 1$ works, with $s_i=6x_i$. For $Q_5$ the uniform stress
+provably fails; a valid stress takes the two values $20/21$ (on $210$
+contacts) and $4/3$ (on $30$), with $s_i=\lambda_i x_i$,
+$\lambda_i\in\{40/7,44/7\}$. For $R_5$ the values are $200/207$
+($\times 210$), $280/207$ ($\times 18$), $220/207$ ($\times 12$), with
+$\lambda_i\in\{400/69,440/69,140/23\}$. Verification is a finite exact
+computation. For any flex $v$,
+\[
+\textstyle\sum_e \omega_e\, g_e(v) \;=\; \sum_i \ip{s_i}{v_i}
+\;=\; \sum_i \lambda_i \ip{x_i}{v_i} \;=\; 0 ,
+\]
+and since every $\omega_e>0$ and every $g_e(v)\le 0$, all $g_e(v)=0$:
+every flex preserves every contact to first order.
+
+\emph{(ii) The equality kernel is trivial:} the stacked linear system of
+the $40$ tangency equations and $240$ contact equalities in the $200$
+unknowns has rank exactly $190$ over $\Q$ (computed by fraction-free
+Bareiss elimination, and independently via a mod-$p$ argument:
+$\mathrm{rank}_{\mathbb F_p}\le\mathrm{rank}_\Q$ together with the
+$10$-dimensional space of rotation flexes in the kernel). Hence the
+kernel is exactly the trivial flexes, and $X$ is infinitesimally
+jammed.
+\end{proof}
+
 \section{Methodology, verification, and data}\label{sec:methods}
 
 All verdict-relevant computations are exact: configurations are stored
@@ -402,9 +430,13 @@ separately, by rebuilding them from a $12$-clique of the hole graph.
 Lemmas~\ref{lem:red}, \ref{lem:unitip} and~\ref{lem:rigid} are proved in
 the text and use only the verified inputs above. The repository
 \url{https://github.com/smitterer/kissingnumbers} (cite as
-\texttt{github.com/smitterer/kissingnumbers}, release v1.0) contains all
+\texttt{github.com/smitterer/kissingnumbers}, release v1.1) contains all
 configurations, certificates, both implementations, and an experiment log; a
 single command re-runs every check against a table of expected values.
+
+\section*{Acknowledgments}
+We thank Henry Cohn for suggestions on the presentation of this note and
+for pointing out the reference \cite{Lev1979}.
 
 \begin{thebibliography}{99}
 \bibitem{KZ1873} A.~Korkine, G.~Zolotareff, Sur les formes quadratiques,
@@ -432,6 +464,13 @@ arXiv:2404.18794.
 spheres, \emph{Duke Math.\ J.} \textbf{9} (1942), 96--108.
 \bibitem{DGS1977} P.~Delsarte, J.M.~Goethals, J.J.~Seidel, Spherical codes
 and designs, \emph{Geom.\ Dedicata} \textbf{6} (1977), 363--388.
+\bibitem{Lev1979} V.I.~Levenshtein, On bounds for packings in
+$n$-dimensional Euclidean space, \emph{Dokl.\ Akad.\ Nauk SSSR}
+\textbf{245} (1979), no.~6, 1299--1303 (Russian); English translation:
+\emph{Soviet Math.\ Dokl.} \textbf{20} (1979), no.~2, 417--421.
+\bibitem{CK2007} H.~Cohn, A.~Kumar, Universally optimal distribution of
+points on spheres, \emph{J.\ Amer.\ Math.\ Soc.} \textbf{20} (2007),
+no.~1, 99--148.
 \end{thebibliography}
 
 \end{document}

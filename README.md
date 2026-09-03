@@ -1,22 +1,22 @@
-# Rigidity of the known five-dimensional kissing configurations — verification repository
+# Six-dimensional extensions of the five-dimensional kissing configurations Q5 and R5 — verification repository
 
-Code, exact data and certificates for the paper *Rigidity of the known
-five-dimensional kissing configurations and a proof of a conjecture of Cohn
-and Rajagopal* (`docs/preprint/kissing5_note.tex`).
+Code, exact data and certificates for the paper *Six-dimensional extensions
+of the five-dimensional kissing configurations Q5 and R5: a proof of a
+conjecture of Cohn and Rajagopal* (`docs/preprint/kissing5_note.tex`).
 
-Repository: <https://github.com/smitterer/kissingnumbers>, release v1.0
+Repository: <https://github.com/smitterer/kissingnumbers>, release v1.1
 (how to cite: section 9).
 
 ## 1. What this repository certifies, and what it does not
 
 The repository certifies, in exact rational arithmetic, the computational
-claims of the paper: **Theorem 1** (each of the four known 40-point kissing
-configurations D5, L5, Q5, R5 in R⁵ is infinitesimally jammed: a strictly
-positive self-stress exists on all 240 contacts and the equality system of
-40 tangency and 240 contact equations has rank exactly 190 in 200
-unknowns), **Theorem 2** (the polytope P_X = {w : ⟨x,w⟩ ≤ 1 for all x ∈ X}
-has 42/50/92/100 vertices with maximal squared norm 5/4, attained at exactly
-32 vertices, so no 41st point can be adjoined), **Theorem 6** (explicit
+claims of the paper: **Theorem 2** (the polytope P_X = {w : ⟨x,w⟩ ≤ 1 for
+all x ∈ X} has 42/50/92/100 vertices with maximal squared norm 5/4, attained
+at exactly 32 vertices, so no 41st point can be adjoined), **Theorem 3**
+(each of the four known 40-point kissing configurations D5, L5, Q5, R5 in R⁵
+is infinitesimally jammed: a strictly positive self-stress exists on all 240
+contacts and the equality system of 40 tangency and 240 contact equations has
+rank exactly 190 in 200 unknowns), **Theorem 6** (explicit
 64-point six-dimensional kissing configurations with Q5 and R5 as central
 cross sections), **Lemma 4** (the hole graphs have clique number 16, 16,
 12, 12) and **Lemma 8** (the Gegenbauer identity
@@ -83,7 +83,7 @@ Generated from `results/summary.json` by the command shown below, not typed
 by hand; every row is one check of `run_all.py`.
 
 <!-- COMPUTED-VALUES-BEGIN -->
-Run of 2026-09-03T17:16:40, release v1.0, Python 3.14.4, 150 checks, 0 failed, wall time 38.2s.
+Run of 2026-09-03T21:59:51, release v1.1, Python 3.14.4, 150 checks, 0 failed, wall time 24.6s.
 
 | step | check | expected | computed | pass |
 |---|---|---|---|---|
@@ -242,24 +242,31 @@ Run of 2026-09-03T17:16:40, release v1.0, Python 3.14.4, 150 checks, 0 failed, w
 Regeneration command (from the repository root, after `make verify`):
 
 ```
-python3 -c "import json; d=json.load(open('results/summary.json')); print('Run of %s, release v1.0, Python %s, %d checks, %d failed, wall time %ss.\n' % (d['generated'], d['python'], d['n_checks'], d['n_failed'], d['total_wall_time_s'])); print('| step | check | expected | computed | pass |'); print('|---|---|---|---|---|'); [print('| %s | %s | %s | %s | %s |' % (c['step'], c['check'], c['expected'], c['computed'], 'PASS' if c['pass'] else 'FAIL')) for c in d['checks']]"
+python3 -c "import json; d=json.load(open('results/summary.json')); print('Run of %s, release v1.1, Python %s, %d checks, %d failed, wall time %ss.\n' % (d['generated'], d['python'], d['n_checks'], d['n_failed'], d['total_wall_time_s'])); print('| step | check | expected | computed | pass |'); print('|---|---|---|---|---|'); [print('| %s | %s | %s | %s | %s |' % (c['step'], c['check'], c['expected'], c['computed'], 'PASS' if c['pass'] else 'FAIL')) for c in d['checks']]"
 ```
 
 ## 4. Map from the paper to the scripts and data
 
 | paper | script(s) that verify it | certificate / data files read |
 |---|---|---|
-| Theorem 1 (jamming) | `analysis/rigidity.py` (contacts, uniform stress, rank mod p, rotation flexes); `analysis/stress_lp.py` (exact strictly positive self-stress; float LP only proposes it); `analysis/certificates/independent_check.py` (second implementation, see §6; prints the ω and λ multiplicities) | `configs/{d5,l5,q5,r5}_40.json`; `analysis/certificates/{q5,r5}_stress_certificate.json` |
+| Theorem 1 (Conjecture 3.1 of Cohn–Rajagopal) | no computation of its own: Lemma 5 + Lemma 10 in the paper | — |
 | Theorem 2 (no 41st point, deep holes) | `analysis/deep_holes.py`; `analysis/certificates/independent_deep_holes_check.py` (second implementation, no tolerance) | `configs/*_40.json`; `analysis/deep_holes_results.json` is the *output* (the 32 holes per configuration, exact strings) |
-| Theorem 3 (Conjecture 3.1 of Cohn–Rajagopal) | no computation of its own: Lemma 5 + Lemma 10 in the paper | — |
+| Theorem 3 (jamming) | `analysis/rigidity.py` (contacts, uniform stress, rank mod p, rotation flexes); `analysis/stress_lp.py` (exact strictly positive self-stress; float LP only proposes it); `analysis/certificates/independent_check.py` (second implementation, see §6; prints the ω and λ multiplicities) | `configs/{d5,l5,q5,r5}_40.json`; `analysis/certificates/{q5,r5}_stress_certificate.json` |
 | Lemma 4 (hole-graph clique numbers) | `analysis/verify_lemma4_lemma8.py` (two clique algorithms must agree) | configurations rebuilt from the Cohn–Rajagopal rules and compared, as point sets, with `configs/*_40.json` |
-| Lemma 5 (reduction) | proof in the paper; its inputs — 240 contacts, Σx = 0, span R⁵, max \|w\|² = 5/4 — are the outputs of the Theorem 1 and Theorem 2 scripts (see `analysis/certificates/reduction_lemma_check.md`) | — |
+| Lemma 5 (reduction) | proof in the paper; its inputs — 240 contacts, Σx = 0, span R⁵, max \|w\|² = 5/4 — are the outputs of the Theorem 2 and Theorem 3 scripts (see `analysis/certificates/reduction_lemma_check.md`) | — |
 | Theorem 6 (64-point extensions) | `verify/exact_check.py` on the shipped coordinates; rebuilt from a 12-clique of the hole graph in `analysis/verify_lemma4_lemma8.py` | `configs/{q5,r5}_ext64.json` |
 | Lemma 7 (norm coupling) | proof in the paper | — |
 | Lemma 8 (LP bound) and Remark 9 (sharpness) | `analysis/verify_lemma4_lemma8.py` (sympy identity, F(1) = 16, demihypercube inner products {1/5, −3/5}) | — |
 | Lemma 10 (equality-case rigidity) | proof in the paper, using Theorem 2 and Lemma 4 | — |
 | the configurations themselves | `verify/exact_check.py` (+ `verify/test_verify.py`, 33 tests); `configs/generate_configs.py` compares the files with the source excerpts | `configs/*.json`, `configs/sources/` |
 | Szöllősi's published run (validation of the search code) | `search/run_szollosi_repro.py` | writes `experiments/szollosi_repro/` (deterministic) |
+
+Comments in `run_all.py` (its header and the `EXPECTED` section markers) and
+in `experiments/README.md` use the numbering of release v1.0, in which the
+jamming theorem was Theorem 1 and the main theorem Theorem 3; the code is
+unchanged from v1.0. All check names, output block headers and file names
+carry only numbers that are the same in both releases (Lemma 4, Theorem 6,
+Lemma 8).
 
 Layout: `verify/` exact checker, `configs/` exact data, `analysis/` the
 verification scripts and certificates, `search/` the clique search,
@@ -299,7 +306,7 @@ contains a floating-point number.
 
 Three claims are checked by two independent computations:
 
-- **Theorem 1.** `analysis/rigidity.py` + `analysis/stress_lp.py` versus
+- **Theorem 3.** `analysis/rigidity.py` + `analysis/stress_lp.py` versus
   `analysis/certificates/independent_check.py`. The second builds the
   equality system from the contact graph as sparse dict-of-rows scaled by
   one global denominator (not dense rows scaled per row), generates the ten
@@ -359,4 +366,4 @@ data.
 ## 9. Citing
 
 Repository: <https://github.com/smitterer/kissingnumbers>. Cite as
-`github.com/smitterer/kissingnumbers, release v1.0`.
+`github.com/smitterer/kissingnumbers, release v1.1`.
