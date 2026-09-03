@@ -83,7 +83,7 @@ Generated from `results/summary.json` by the command shown below, not typed
 by hand; every row is one check of `run_all.py`.
 
 <!-- COMPUTED-VALUES-BEGIN -->
-Run of 2026-09-03T16:17:19, release v1.0, Python 3.14.4, 150 checks, 0 failed, wall time 24.9s.
+Run of 2026-09-03T17:16:40, release v1.0, Python 3.14.4, 150 checks, 0 failed, wall time 38.2s.
 
 | step | check | expected | computed | pass |
 |---|---|---|---|---|
@@ -276,14 +276,14 @@ prefilters — the vertex prefilter of `analysis/deep_holes.py` and
 
 - `analysis/deep_holes.py` and `analysis/verify_lemma4_lemma8.py` solve the
   C(40,5) = 658 008 five-by-five systems in numpy to prefilter vertex
-  candidates; every surviving candidate is rationalised, deduplicated as an
+  candidates; every surviving candidate is rationalized, deduplicated as an
   exact tuple, and checked (feasibility and the rank-5 vertex test) in
   `Fraction`, and the count is reported from the exact set. Completeness of
   the vertex list is certified by `independent_deep_holes_check.py`, which
   enumerates all subsets in int64 integer arithmetic with a proven overflow
   bound and uses no tolerance anywhere.
 - `analysis/stress_lp.py` uses a scipy linear program to propose a stress
-  direction; the proposal is rationalised and the certificate (positivity
+  direction; the proposal is rationalized and the certificate (positivity
   on all 240 contacts, s_i ∥ x_i) is verified exactly before it is accepted,
   and the committed certificates are re-checked by `independent_check.py`
   without any float.
@@ -297,7 +297,7 @@ contains a floating-point number.
 
 ## 6. Independence
 
-Three claims are checked by two independently written implementations:
+Three claims are checked by two independent computations:
 
 - **Theorem 1.** `analysis/rigidity.py` + `analysis/stress_lp.py` versus
   `analysis/certificates/independent_check.py`. The second builds the
@@ -308,7 +308,7 @@ Three claims are checked by two independently written implementations:
   λ-multiple), obtains the self-stress dimension 90 by duality from the
   equality rank, and uses different primes plus an exact Bareiss rank over
   Q. An AST comparison (all identifiers, attributes and string constants
-  normalised, docstrings stripped) finds **no function body shared** between
+  normalized, docstrings stripped) finds **no function body shared** between
   `independent_check.py` and `rigidity.py`/`stress_lp.py`; before
   2026-09-03 two bodies were identical and two more were renamed copies.
 - **Theorem 2.** `analysis/deep_holes.py` (float prefilter, exact
@@ -316,7 +316,7 @@ Three claims are checked by two independently written implementations:
   integer enumeration, plus an exhaustive recession-cone check of
   boundedness and a closed-form cross-check for D5).
 - **Lemma 4.** `networkx.find_cliques` (Bron–Kerbosch) and an own
-  branch-and-bound with greedy-colouring bound, in
+  branch-and-bound with greedy-coloring bound, in
   `analysis/verify_lemma4_lemma8.py`; both must return 16/16/12/12.
 
 Checked by one implementation: the Gegenbauer identity of Lemma 8 (sympy
@@ -349,7 +349,9 @@ verifier implementations and literature retrieval, respectively). The
 results were then independently re-verified from the committed code in
 fresh sessions with Claude Fable 5.1, Gemini Pro and MiniMax M3, and by
 the exact-arithmetic checks described in Section 5. The author is
-responsible for the mathematics, the repository and this text.
+responsible for this publication, the repository and this text; the
+mathematics was developed by the systems named above and verified as
+described in Section 5.
 
 Every result is reproduced by `make verify` from the committed code and
 data.

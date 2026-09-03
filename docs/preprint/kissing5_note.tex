@@ -17,7 +17,7 @@
 
 \title{Rigidity of the known five-dimensional kissing configurations\\
 and a proof of a conjecture of Cohn and Rajagopal}
-\author{Stephan Mitterer, MBA\thanks{%
+\author{Stephan Mitterer\thanks{%
 Computer assistance. All code, certificates and the first draft of this
 note were produced with Claude Fable 5 (Anthropic) under the author's
 direction (with Claude Opus 5 and Claude Sonnet 5 as subagents for the
@@ -25,7 +25,9 @@ verifier implementations and literature retrieval, respectively). The
 results were then independently re-verified from the committed code in
 fresh sessions with Claude Fable 5.1, Gemini Pro and MiniMax M3, and by
 the exact-arithmetic checks described in Section~\ref{sec:methods}. The
-author is responsible for the mathematics, the repository and this text.}\\
+author is responsible for this publication, the repository and this text;
+the mathematics was developed by the systems named above and verified as
+described in Section~\ref{sec:methods}.}\\
 \texttt{s.mitterer@online360.at}}
 \date{September 2026}
 
@@ -52,8 +54,8 @@ computation that the deep-hole graphs of $Q_5$ and $R_5$ have clique
 number $12$ (versus $16$ for $D_5,L_5$). We also construct explicit
 $64$-point six-dimensional kissing configurations with $Q_5$ and $R_5$
 cross sections. All certificates are exact data (rational, or in
-$\Q(\sqrt3)$ for the $64$-point extensions), verified by independently
-written implementations, and accompany the paper.
+$\Q(\sqrt3)$ for the $64$-point extensions), verified by independent
+computations, and accompany the paper.
 \end{abstract}
 
 \section{Introduction}
@@ -170,7 +172,7 @@ point $x$ would satisfy $x\in P_X$ and $|x|^2=2>5/4$.
 For later use, define the \emph{hole graph} of $X$: vertices the $32$
 deep holes, edges the pairs with $\ip{w}{w'}\le 1/4$ (the maximum inner
 product between distinct holes is $23/20$ for $Q_5,R_5$ and $3/4$ for
-$D_5,L_5$). In the normalisation of \cite[\S3]{CR2024} the holes lie at
+$D_5,L_5$). In the normalization of \cite[\S3]{CR2024} the holes lie at
 squared norm $2$ and the threshold is $2/5$; our holes and threshold are
 the same up to the factor $8/5$, and for unit vectors the threshold is the
 $1/5$ of Lemmas~\ref{lem:unitip}--\ref{lem:lp}.
@@ -211,7 +213,7 @@ $\ip{u_i}{u_j}+h_ih_j\le 1$.
 $H=\{\ip{y}{n}=c\}$, $|n|=1$; all points of $Z$ lie on the ambient sphere
 $S$. Since $X$ affinely spans $\R^5$ its circumsphere is unique, and the
 similarity carries it to the unique circumsphere of $Z$ inside $H$, namely
-$H\cap S$ with centre $cn$ and squared radius $2-c^2$; hence
+$H\cap S$ with center $cn$ and squared radius $2-c^2$; hence
 $Z = cn + \lambda\cdot(\text{orthogonal image of }X)$ with
 $\lambda^2\cdot 2 = 2-c^2$. $X$ has $240$ contact pairs at inner
 product exactly $1$; their images satisfy
@@ -365,11 +367,12 @@ tight where it must be.
 $M(Q_5)=M(R_5)=12$; equivalently, the $64$-point configurations of
 Theorem~\ref{thm:64} are the largest six-dimensional kissing
 configurations with $Q_5$ or $R_5$ cross sections. (Supported by the
-exact hole-clique number $12$ and a multistart penalty minimisation
-($200$ restarts per case, \texttt{experiments/conjecture31\_stageA.py})
-that reaches $12$ points to machine precision and finds no $13$-point cap
-set; this probe is not part of the verified claims. Closing $12$ versus
-$15$ requires more than the LP bound, by Remark~\ref{rem:sharp}.)
+exact hole-clique number $12$ and by a multistart penalty minimization,
+$200$ restarts per case, script
+\texttt{experiments/conjecture31\_stageA.py}, which reaches $12$ points to
+machine precision and finds no $13$-point cap set; this probe is not part
+of the verified claims. Closing $12$ versus $15$ requires more than the LP
+bound, by Remark~\ref{rem:sharp}.)
 \end{conjecture}
 
 \section{Methodology, verification, and data}\label{sec:methods}
@@ -381,9 +384,9 @@ multiquadratic representation with a decidable sign test, no floating
 point on any accepting path) verifies all norm and inner-product
 claims; the vertex enumeration of Section~\ref{sec:holes} runs in
 integer arithmetic with proven overflow bounds; stresses carry rational
-certificates; ranks and clique numbers are recomputed exactly by two
-independent implementations. Three of the computational
-claims are checked by two independently written implementations: the
+certificates; ranks are recomputed exactly by two independent
+implementations and clique numbers by two algorithms. Three of the
+computational claims are checked by two independent computations: the
 jamming certificates of Theorem~\ref{thm:jam} (positivity and parallelism
 of the stress and the rank $190$; one implementation uses dense integer
 rows and a $\lambda$-multiple test, the other sparse rows assembled from
