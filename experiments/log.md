@@ -1,6 +1,6 @@
 # Experiment log
 
-Every experiment gets an entry: date, git commit, command/seed/parameters,
+Every experiment gets an entry: date, command/seed/parameters,
 runtime, raw result, and where the artifacts live. Interpretation goes into the paper
 and the project's working notes, not here.
 
